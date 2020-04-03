@@ -6,7 +6,12 @@ class ListQuotesComponent extends Component {
 
     render() {
         if (this.props.quotes) {
-            return this.props.quotes.map((quote) => (
+            console.log(this.props.quotes.map(JSON.parse));
+
+            var quotes = this.props.quotes.map(JSON.parse);
+            
+            
+            return quotes.map((quote) => (
                 <QuoteItem key={quote.id} quote={quote} markComplete={this.props.markComplete} delQuote={this.props.delQuote} />
             ));
         }

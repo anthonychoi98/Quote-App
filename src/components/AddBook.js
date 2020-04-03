@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import AppDataService from './AppDataService';
 import {withRouter} from 'react-router-dom';
 
-export class AddQuote extends Component {
+export class AddBook extends Component {
 
   constructor(props) {
     super(props)
@@ -11,9 +11,6 @@ export class AddQuote extends Component {
     this.state = {
         title: '',
         author: '',
-        quote: '',
-        chapter: '',
-        comment: ''
     }
 
     this.onSubmit = this.onSubmit.bind(this)
@@ -39,7 +36,7 @@ export class AddQuote extends Component {
           type="text" 
           name="title" 
           style={{ flex: '10', padding: '5px' }}
-          placeholder="Add Title ..." 
+          placeholder="Add Book ..." 
           value={this.state.title}
           onChange={this.onChange}
         />
@@ -49,22 +46,6 @@ export class AddQuote extends Component {
           style={{ flex: '10', padding: '5px' }}
           placeholder="Add Author ..." 
           value={this.state.author}
-          onChange={this.onChange}
-        />
-        <input 
-          type="text" 
-          name="quote" 
-          style={{ flex: '10', padding: '5px' }}
-          placeholder="Add Quote ..." 
-          value={this.state.quote}
-          onChange={this.onChange}
-        />
-        <input 
-          type="text" 
-          name="chapter" 
-          style={{ flex: '10', padding: '5px' }}
-          placeholder="Add Chapter ..." 
-          value={this.state.chapter}
           onChange={this.onChange}
         />
         
@@ -80,8 +61,8 @@ export class AddQuote extends Component {
 }
 
 // PropTypes
-AddQuote.propTypes = {
-  addQuote: PropTypes.func.isRequired
+AddBook.propTypes = {
+  addBook: PropTypes.func.isRequired
 }
 
-export default withRouter(AddQuote);
+export default withRouter(AddBook);

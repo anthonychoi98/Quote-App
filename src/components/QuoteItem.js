@@ -17,13 +17,22 @@ export class QuoteItem extends Component {
       <div style={this.getStyle()}>
         <p>
           <input type="checkbox" onChange={this.props.markComplete.bind(this, id)} /> {' '}
-          { title }
+
+          { this.props.quote.title }
+          { this.props.quote.quote }
+          { this.props.quote.chapter }
+          { this.props.quote.comment }
+
           <button onClick={this.props.delQuote.bind(this, id)} style={btnStyle}>x</button>
         </p>
       </div>
     )
   }
 }
+
+//error is from proptypes... quote is a string ?
+
+//Objects are not valid as a React child (found: object with keys {id, title, completed}). If you meant to render a collection of children, use an array instead.
 
 // PropTypes
 QuoteItem.propTypes = {

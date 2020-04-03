@@ -18,11 +18,21 @@ public interface PersonDao {
         return insertPerson(id, person);
     }
 
-    int insertQuote(String quote, String title, int chapter, Date date);
+    int insertQuote(String title, String author, String quote, int chapter, Date date);
 
     List<Person>selectAllPeople();
 
-    List<String> getQuotes();
+    List<Quote> getQuotes(List<Quote>list);
+
+    List<Book> getBooks(List<Book>list);
+
+    int insertBook(String booktitle, String author);
+
+    boolean login(String email, String password);
+
+
+
+
 
     String getTotals() throws UnirestException;
 

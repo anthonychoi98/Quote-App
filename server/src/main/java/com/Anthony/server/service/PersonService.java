@@ -20,17 +20,25 @@ public class PersonService {
         this.personDao = personDao;
     }
 
-    public int insertQuote(String booktitle, String quote, int chapter, Date date){
-        return personDao.insertQuote(booktitle, quote, chapter, date);
+    public int insertQuote(String booktitle, String author, String quote, int chapter, Date date){
+        return personDao.insertQuote(booktitle, author, quote, chapter, date);
     }
 
-    public List<String> getQuotes(){
-        return personDao.getQuotes();
+    public List<Quote> getQuotes(List<Quote>list){
+        return personDao.getQuotes(list);
     }
     
 
-    public int addPerson(Person person){
+  /*  public int addPerson(Person person){
         return personDao.insertPerson(person);
+    }*/
+
+    public int insertBook(String booktitle, String author){
+        return personDao.insertBook(booktitle, author);
+    }
+
+    public List<Book> getBooks(List<Book>list){
+        return personDao.getBooks(list);
     }
 
     public List<Person> getAllPeople(){

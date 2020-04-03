@@ -1,6 +1,7 @@
 package com.Anthony.server.api;
 import com.Anthony.server.model.*;
 import com.Anthony.server.service.PersonService;
+import com.google.gson.Gson;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.util.List;
@@ -41,35 +42,68 @@ public class PersonController {
         return personService.getCountryTotals();
     }
 
-    @PostMapping("/add")
+  /*  @PostMapping("/add")
     public void addPerson(@RequestBody Person person){
         personService.addPerson(person);
-    }
+    }*/
 
     @PostMapping("addQuote")
     //public void addQuote(@RequestBody String booktitle, @RequestBody String quote, @RequestBody int chapter, @RequestBody Date date){
-    public void addQuote(@RequestBody String booktitle) throws ParseException{
+    public void addQuote(@RequestBody String data) throws ParseException{
 
         String quote = "hello world";
-
+        String author = "haruki";
         String date1 = "01/28/2020";
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(date1);  
 
-        personService.insertQuote("ssw", quote, 12, date);
+        personService.insertQuote("ssw", author, data, 12, date);
     }
 
     @GetMapping("/getQuotes")
     public List<String> getQuotes(){
-        List<String> list = new ArrayList<>();
-        list.add("h");
-        personService.getQuotes();
+        List<Quote> quotes = new ArrayList<>();
+
+        List<String> list = new ArrayList<String>();
+
+        Gson gson = new Gson();
+        
+        quotes = personService.getQuotes(quotes);
+
+        for(Quote quote : quotes){
+            list.add(gson.toJson(quote));
+        }
+        
         return list;
     }
 
-    @GetMapping("/api/hello")
-    public String hello() {
-        return "Hello, the time at the server is now " + new Date() + "\n";
+    @PostMapping("addBook")
+    public void addBook(@RequestBody String data) throws ParseException{
+
+        personService.insertBook("book_title", "author");
     }
+
+    @GetMapping("/getBooks")
+    public List<String> getBooks(){
+        List<Book> books = new ArrayList<>();
+
+        List<String> list = new ArrayList<String>();
+
+        Gson gson = new Gson();
+        
+        books = personService.getBooks(books);
+
+        for(Book book : books){
+            list.add(gson.toJson(book));
+        }
+        
+        return list;
+    }
+
+    @GetMapping("login")
+        public boolean login(@RequestBody String email, @RequestBody String password){
+            return personService.login(email, password);
+        }  
+    
     
 
     @GetMapping("/get")
