@@ -5,9 +5,9 @@ import {Button} from 'semantic-ui-react';
  class LoginForm extends React.Component {
    state = {
 
-     //creating the data variable that holds the email and password to be passed on
+     //creating the data variable that holds the username and password to be passed on
      data: {
-       email: '',
+      username: '',
        password: ''
      },
      loading: false,
@@ -22,7 +22,7 @@ import {Button} from 'semantic-ui-react';
      e.preventDefault();
      //This submits the data to the parent component.
      this.props.submit(this.state.data);
-     //alert('Username is: ' + username.data.email);
+     //alert('Username is: ' + username.data.username);
    };
 
    render() {
@@ -32,8 +32,8 @@ import {Button} from 'semantic-ui-react';
 
 
         <form onSubmit = {this.onSubmit} >
-            <label htmlFor="email"><b>Email</b></label><br/>
-            <input type="email" placeholder="Enter Email" id="email" name="email" value={data.email} onChange = {this.onChange} required/>
+            <label htmlFor="username"><b>Username</b></label><br/>
+            <input type="username" placeholder="Enter Username" id="username" name="username" value={data.username} onChange = {this.onChange} required/>
 
             <br/><br/>
 

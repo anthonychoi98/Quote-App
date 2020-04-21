@@ -20,8 +20,8 @@ public class PersonService {
         this.personDao = personDao;
     }
 
-    public int insertQuote(String booktitle, String author, String quote, int chapter, Date date){
-        return personDao.insertQuote(booktitle, author, quote, chapter, date);
+    public int insertQuote(String booktitle, String author, String quote, int chapter, String comment, Date date){
+        return personDao.insertQuote(booktitle, author, quote, chapter, comment, date);
     }
 
     public List<Quote> getQuotes(List<Quote>list){
@@ -40,6 +40,23 @@ public class PersonService {
     public List<Book> getBooks(List<Book>list){
         return personDao.getBooks(list);
     }
+
+    public boolean login(String email, String password){
+        return personDao.login(email, password);
+    }
+
+    public boolean signup(String username, String email, String password){
+        return personDao.signup(username, email, password);
+    }
+
+
+
+
+
+
+
+
+
 
     public List<Person> getAllPeople(){
         return personDao.selectAllPeople();

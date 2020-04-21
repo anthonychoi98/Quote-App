@@ -11,6 +11,9 @@ import java.util.UUID;
 
 public interface PersonDao {
 
+    String hashPassword(String plainTextPassword);
+    boolean checkPass(String plainPassword, String hashedPassword);
+
     int insertPerson(UUID id, Person person);
     
     default int insertPerson(Person person){
@@ -18,7 +21,7 @@ public interface PersonDao {
         return insertPerson(id, person);
     }
 
-    int insertQuote(String title, String author, String quote, int chapter, Date date);
+    int insertQuote(String title, String author, String quote, int chapter, String comment, Date date);
 
     List<Person>selectAllPeople();
 
@@ -30,7 +33,7 @@ public interface PersonDao {
 
     boolean login(String email, String password);
 
-
+    boolean signup(String username, String email, String password);
 
 
 

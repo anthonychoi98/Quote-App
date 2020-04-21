@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;  
+import java.text.SimpleDateFormat;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,10 +54,11 @@ public class PersonController {
 
         String quote = "hello world";
         String author = "haruki";
+        String comment = "";
         String date1 = "01/28/2020";
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(date1);  
 
-        personService.insertQuote("ssw", author, data, 12, date);
+        personService.insertQuote("ssw", author, data, 12, comment, date);
     }
 
     @GetMapping("/getQuotes")
@@ -99,11 +101,26 @@ public class PersonController {
         return list;
     }
 
-    @GetMapping("login")
-        public boolean login(@RequestBody String email, @RequestBody String password){
-            return personService.login(email, password);
-        }  
+    @PostMapping("/login")
+    public boolean login(@RequestBody String data){
+        System.out.println("here is the data: " + data);
+        JSONObject jsonObject = new JSONObject(data);
+        //String username = jsonObject.getString("username"); 
+        String email = jsonObject.getString("email"); 
+        String password = jsonObject.getString("password"); 
+        return personService.login(email, password);
+    }  
     
+    @PostMapping("/signup")
+    public boolean signup(@RequestBody String data){
+
+        JSONObject jsonObject = new JSONObject(data);
+        String username = jsonObject.getString("username"); 
+        String email = jsonObject.getString("email"); 
+        String password = jsonObject.getString("password"); 
+        
+        return personService.signup(username, email, password);
+    }
     
 
     @GetMapping("/get")

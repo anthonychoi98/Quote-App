@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +28,23 @@ public class FakePersonDataAccessService implements PersonDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Override
+    public String hashPassword(String plainTextPassword){
+		return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    @Override
+    public boolean checkPass(String plainPassword, String hashedPassword) {
+		if (BCrypt.checkpw(plainPassword, hashedPassword)){
+            System.out.println("The password matches.");
+            return true;
+        }
+		else{
+            System.out.println("The password does not match.");
+            return false;
+        }
+	}
     
     @Override
     public int insertPerson(UUID id, Person person) {
@@ -35,7 +53,7 @@ public class FakePersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public int insertQuote(String title, String author, String quote, int chapter, Date date){
+    public int insertQuote(String title, String author, String quote, int chapter, String comment, Date date){
         chapter = 11;
         
         jdbcTemplate.update(
@@ -59,6 +77,7 @@ public class FakePersonDataAccessService implements PersonDao {
                                 rs.getString("author"),
                                 rs.getString("quote"),
                                 rs.getInt("chapter"),
+                                rs.getString("comment"),
                                 rs.getDate("date")
                         )
         ));
@@ -88,13 +107,48 @@ public class FakePersonDataAccessService implements PersonDao {
 
     @Override
     public boolean login(String email, String password){
-        String sql = "select email, password from users where " + email + " = email;";
+        System.out.println("email is " + email + " and pwd is : " + password);
+
+        String sql = "select email from users where " + email + " = email;";
         
-        String userEmail = jdbcTemplate.query(sql, rs.getString("email"));
+        boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
+
+        //if email exists, try to match passwords
+        if(emailExists){
+            String passwordQuery = "select password from users where email = '" + email + "';";
+    
+            String userPassword = (String) jdbcTemplate.queryForObject(
+                passwordQuery, String.class);
         
+           if(checkPass(password, userPassword)){
+               //return authentication token
+                return true;
+            }
+            else{
+                //invalid password
+                return false;
+            }
+        }
 
+        return false;
+    }
 
+    @Override
+    public boolean signup(String username, String email, String password){
+        System.out.println("signing up...."  + username);
 
+        String sql = "select email from users where " + email + " = email;";
+        
+        //NOT SURE WHAT EMAIL PARAMETER IS FOR NEW OBJECT CLASS
+
+        boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
+
+        if(emailExists == false){
+            jdbcTemplate.update(
+            "insert into users (username, email, password) values(?,?,?)",
+            username, email, hashPassword(password));
+            return true;
+        }
 
         return false;
     }

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { Component }from 'react';
+import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { render } from '@testing-library/react';
@@ -19,7 +19,39 @@ import HomePage from "./components/pages/HomePage";
 import './App.css';
 import { toUnicode } from 'punycode';
 import AppDataService from './components/AppDataService';
- 
+import Auth from './components/auth.js'
+//import ProtectedRoute from './components/ProtectedRoute';
+
+
+const auth = new Auth();
+
+const ProtectedRoute = ({
+  component: Component,
+  ...rest
+}) => {
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        if (auth.loggedIn()) {
+          return <Component {...props} />;
+        } else {
+          return (
+            <Redirect
+              to={{
+                pathname: "/",
+                state: {
+                  from: props.location
+                }
+              }}
+            />
+          );
+        }
+      }}
+    />
+  );
+};
+
 
 /// CREATE NEW TABLE FOR EACH BOOK/AUTHOR, THEN IN EACH TABLE YOU START ADDING QUOTES....
 
@@ -31,17 +63,25 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header />
-            <Route path="/" exact component = {HomePage}/>
+            {/* <Route path="/" exact component = {HomePage}/>
             <Route path="/login" exact component = {LoginPage}/>
             <Route path="/landing" exact component = {LandingPage}/>
-            <Route path="/registration" exact component = {RegistrationPage}/>
-
-            
+            <Route path="/registration" exact component = {RegistrationPage}/>  */}
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route path="/login" exact component = {LoginPage}/>
+              <Route path="/registration" exact component = {RegistrationPage}/> 
+              <ProtectedRoute exact path="/landing" component={LandingPage} />
+              <Route path="*" component={() => "404 NOT FOUND"} />
+            </Switch>
           </div>
         </div>
       </Router>
     );
   }
+
+
+
 }
 
 export default App;
