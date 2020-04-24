@@ -7,8 +7,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
+import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -25,6 +29,8 @@ public class FakePersonDataAccessService implements PersonDao {
 
     private static List<Person> DB = new ArrayList<Person>();
     private static List<String> list = new ArrayList<String>();
+
+    //autowire a bcryptpasswordencoder
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -45,12 +51,6 @@ public class FakePersonDataAccessService implements PersonDao {
             return false;
         }
 	}
-    
-    @Override
-    public int insertPerson(UUID id, Person person) {
-        DB.add(new Person(id, person.getName()));
-        return 1;
-    }
 
     @Override
     public int insertQuote(String title, String author, String quote, int chapter, String comment, Date date){
@@ -105,6 +105,36 @@ public class FakePersonDataAccessService implements PersonDao {
         return list;
     }
 
+    @Override 
+    public ResponseEntity<Person>  personInfo(String username){
+        Person person = new Person();
+
+        System.out.println("username is " + username);
+        String sql = "select username from users where " + username + " = username;";
+
+        boolean userExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE username = '" + username + "');", Boolean.class);
+        System.out.println(userExists);
+
+        if(userExists){
+            String passwordQuery = "select password from users where username = '" + username + "';";
+    
+            String userPassword = (String) jdbcTemplate.queryForObject(
+                passwordQuery, String.class);
+
+                // if(checkPass(password, userPassword)){
+                //     //return authentication token
+                //      return data.append(username, userPassword);
+                //  }
+                person.setPassword(userPassword);
+                person.setUsername(username);
+
+                return new ResponseEntity<Person>(person, HttpStatus.OK);
+                
+        }
+
+        return new ResponseEntity<Person>(person, HttpStatus.OK);
+    }
+
     @Override
     public boolean login(String email, String password){
         System.out.println("email is " + email + " and pwd is : " + password);
@@ -143,13 +173,16 @@ public class FakePersonDataAccessService implements PersonDao {
 
         boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
 
+        System.out.println("username  : " + username + " and email " + email);
+
         if(emailExists == false){
             jdbcTemplate.update(
             "insert into users (username, email, password) values(?,?,?)",
-            username, email, hashPassword(password));
+            username, email, password);
             return true;
         }
 
+        System.out.println("email exists already");
         return false;
     }
 

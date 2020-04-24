@@ -29,12 +29,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        if(request == null){
+            System.out.println("request is null");
+            System.out.println("OVER OIJAO;EIFJOW;AIJEFO;IAJWOEFINJAOPWINJEFO;IAWJEOFIJAOW;IEJFNO;AWIJE");
+        }
+        if(response == null){
+            System.out.println("response is null");
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
-
-        System.out.println(" authorization: " + authorizationHeader);
-
-        //null for web server, but defined for postman requests
-        System.out.println("content type : " + request.getHeader("Content-Type"));
 
         String username = null;
         String jwt = null;
@@ -44,6 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             username = jwtUtil.extractUsername(jwt);
         }
 
+        System.out.println("username : " + username + " and jwt : " + jwt);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

@@ -20,9 +20,6 @@ class AppDataService {
     insertBook(book){
         return axios.post("http://localhost:8080/addBooks", book);
     }
-    login(email, password){
-        return axios.get("http://localhost:8080/login", email, password);
-    }
     register(email, password){
         return axios.post("http://localhost:8080/signup", email, password);
     }
@@ -36,15 +33,15 @@ class AppDataService {
     }
     //get coronavirus stats
     async totals(){
-        console.log("getting totals");
+        console.log('Bearer ', localStorage.getItem('id_token'));
         let data = await axios.get("http://localhost:8080/totals", {
-            headers: {'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('id_token')
+            }
         })
             .then(this._checkStatus);
-
-        console.log(data.request.response);
-        return data.request.response;
+        return data.request;
     }
 
     _checkStatus(response) {

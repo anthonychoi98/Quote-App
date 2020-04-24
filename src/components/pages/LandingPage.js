@@ -8,6 +8,7 @@ import uuid from 'uuid';
 import AppDataService from '../AppDataService';
 import AddQuote from '../AddQuote';
 import Auth from '../auth.js'
+import PopupComponent from '../PopupComponent';
 
 
 class LandingPage extends React.Component{
@@ -18,7 +19,7 @@ class LandingPage extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.Auth = new Auth();
-        this.helloWorl = this.helloWorld.bind(this);
+        this.helloWorld = this.helloWorld.bind(this);
       }
 
     state = {
@@ -77,7 +78,9 @@ class LandingPage extends React.Component{
 
       async helloWorld(){
         let tots = await AppDataService.totals();
-        document.getElementById('totals').innerHTML = JSON.stringify(tots);
+        let stats = JSON.parse(tots.response);
+        console.log('tots', JSON.parse(tots.response));
+        document.getElementById('totals').innerHTML = JSON.stringify(stats,null,'\t');
       }
 
       handleLogout(){

@@ -7,20 +7,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Person {
 
-    private final UUID id;
-    private final String name;
+    private String username;
+    private String password;
 
-    public Person(@JsonProperty("id") UUID id, @JsonProperty("name") String name) {
-        this.id = id;
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public UUID getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
 }

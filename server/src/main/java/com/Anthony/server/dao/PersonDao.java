@@ -2,6 +2,8 @@ package com.Anthony.server.dao;
 import com.Anthony.server.model.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -14,13 +16,6 @@ public interface PersonDao {
     String hashPassword(String plainTextPassword);
     boolean checkPass(String plainPassword, String hashedPassword);
 
-    int insertPerson(UUID id, Person person);
-    
-    default int insertPerson(Person person){
-        UUID id = UUID.randomUUID();
-        return insertPerson(id, person);
-    }
-
     int insertQuote(String title, String author, String quote, int chapter, String comment, Date date);
 
     List<Person>selectAllPeople();
@@ -32,10 +27,10 @@ public interface PersonDao {
     int insertBook(String booktitle, String author);
 
     boolean login(String email, String password);
+    
+    ResponseEntity<Person> personInfo(String username);
 
     boolean signup(String username, String email, String password);
-
-
 
     String getTotals() throws UnirestException;
 

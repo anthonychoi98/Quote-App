@@ -1,4 +1,5 @@
 package com.Anthony.server.api;
+import com.Anthony.server.jwt.MyUserDetailsService;
 import com.Anthony.server.model.*;
 import com.Anthony.server.service.PersonService;
 import com.google.gson.Gson;
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,10 +28,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController("/api")
 public class PersonController {
     
-    private final PersonService personService;
+    private final MyUserDetailsService personService;
 
     @Autowired
-    public PersonController(PersonService personService){
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    public PersonController(MyUserDetailsService personService){
         this.personService = personService;
     }
 
@@ -42,11 +47,6 @@ public class PersonController {
     public String getStateTotals() throws UnirestException{
         return personService.getCountryTotals();
     }
-
-  /*  @PostMapping("/add")
-    public void addPerson(@RequestBody Person person){
-        personService.addPerson(person);
-    }*/
 
     @PostMapping("addQuote")
     //public void addQuote(@RequestBody String booktitle, @RequestBody String quote, @RequestBody int chapter, @RequestBody Date date){
@@ -101,6 +101,12 @@ public class PersonController {
         return list;
     }
 
+    @PostMapping("/personInfo")
+    public ResponseEntity<Person> personInfo(@RequestBody String data){
+        //use bcrypt to decode password before checking data 
+        return personService.personInfo(data);
+    }
+
     @PostMapping("/login")
     public boolean login(@RequestBody String data){
         System.out.println("here is the data: " + data);
@@ -118,8 +124,12 @@ public class PersonController {
         String username = jsonObject.getString("username"); 
         String email = jsonObject.getString("email"); 
         String password = jsonObject.getString("password"); 
+
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+        System.out.println("encoded password: " + encodedPassword);
         
-        return personService.signup(username, email, password);
+        return personService.signup(username, email, encodedPassword);
     }
     
 

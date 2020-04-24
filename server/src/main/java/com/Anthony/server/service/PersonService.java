@@ -6,8 +6,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,6 +41,10 @@ public class PersonService {
 
     public List<Book> getBooks(List<Book>list){
         return personDao.getBooks(list);
+    }
+
+    public ResponseEntity<Person> personInfo(String username){
+        return personDao.personInfo(username);
     }
 
     public boolean login(String email, String password){

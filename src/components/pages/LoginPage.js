@@ -48,7 +48,7 @@ class LoginPage extends React.Component{
             <LoginForm submit={this.handleFormSubmit}/>
             <p id="status"></p>
             <p>Make a new account? Right here.</p>
-            <Button style={{ size: 200, marginLeft: 10 }} onClick={() => this.props.history.push("/login")}>
+            <Button style={{ size: 200, marginLeft: 10 }} onClick={() => this.props.history.push("/registration")}>
               Register for Account
               </Button>
         </div>
