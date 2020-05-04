@@ -3,6 +3,7 @@ import com.Anthony.server.model.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -13,20 +14,19 @@ import java.util.UUID;
 
 public interface PersonDao {
 
-    String hashPassword(String plainTextPassword);
-    boolean checkPass(String plainPassword, String hashedPassword);
+    ResponseEntity<HttpStatus> insertQuote(String title, String author, String quote, int chapter, String comment, String username);
 
-    int insertQuote(String title, String author, String quote, int chapter, String comment, Date date);
+    ResponseEntity<HttpStatus> deleteQuote(String title, String author, int chapter, String quote, String comment, String username);
 
-    List<Person>selectAllPeople();
+    List<Quote> getQuotes(String title, String author, String username);
 
-    List<Quote> getQuotes(List<Quote>list);
+    List<Book> getBooks(String username);
 
-    List<Book> getBooks(List<Book>list);
+    ResponseEntity<HttpStatus> insertBook(String title, String author, String username);
 
-    int insertBook(String booktitle, String author);
+    ResponseEntity<HttpStatus> deleteBook(String title, String author, String username);
 
-    boolean login(String email, String password);
+   // boolean login(String email, String password);
     
     ResponseEntity<Person> personInfo(String username);
 

@@ -1,35 +1,44 @@
 
 package com.Anthony.server.model;
 
-import java.sql.Date;
-
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Quote{
-    private String book_title;
-    private String author;
-    private String quote;
-    private int chapter;
-    private String comment;
-    private Date date;
+    public String title;
+    public String author;
+    public String quote;
+    public int chapter;
+    public String comment;
+    public String username;
 
     public Quote(){
-        this.book_title = "";
+        this.title = "";
         this.author = "";
         this.quote = "";
         this.chapter = 0;
         this.comment = "";
-        this.date = null;
     }
 
-    public Quote(String book_title, String author, String quote, int chapter, String comment, Date date){
-        this.book_title = book_title;
+    public Quote(String title, String author, String quote, int chapter, String comment, Date date, String username){
+        this.title = title;
         this.author = author;
         this.quote = quote;
         this.chapter = chapter;
         this.comment = comment;
-        this.date = date;
+        this.username = username;
     }
+
+    public Quote(String title, String author, String quote, int chapter, String comment, String username){
+        this.title = title;
+        this.author = author;
+        this.quote = quote;
+        this.chapter = chapter;
+        this.comment = comment;
+        this.username = username;
+    }
+
+
 
     
 

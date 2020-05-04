@@ -7,22 +7,70 @@ class AppDataService {
     constructor(){
         this.Auth = new Auth();
     }
+//maybe should be a post
+    async retrieveAllQuotes(state) {
+        console.log('getting all quotes');
+        let username = this.Auth.getProfile().sub;
+        let book = state.state;
 
-    retrieveAllQuotes() {
-        return axios.get("http://localhost:8080/getQuotes");
+        return await axios.post("http://localhost:8080/getQuotes", {title: book.title, author: book.author, username}, {
+            headers: {'Content-Type': 'application/json',   
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+        })
+            .then(this._checkStatus);
     }
-    retrieveAllBooks(){
-        return axios.get("http://localhost:8080/getBooks");
+
+    async retrieveAllBooks(){
+        let username = this.Auth.getProfile().sub;
+    
+        return await axios.post("http://localhost:8080/getBooks", username, {
+            headers: {'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+        })
+            .then(this._checkStatus) ;
     }
-    insertQuote(quote){
-        return axios.post("http://localhost:8080/addQuote", quote);
+
+    async insertQuote(quote){
+        console.log('quote is : ',quote);
+        return await axios.post("http://localhost:8080/addQuote", quote, {
+            headers: {'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+        })
+            .then(this._checkStatus);
     }
-    insertBook(book){
-        return axios.post("http://localhost:8080/addBooks", book);
+
+    async insertBook(book){
+        return await axios.post("http://localhost:8080/addBook", book, {
+            headers: {'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+        })
+            .then(this._checkStatus);
     }
+
+    async delQuote(quote){
+        console.log("deleting", quote);
+        return await axios.delete("http://localhost:8080/deleteQuote", {
+            headers: {'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
+            data: quote
+        })
+            .then(this._checkStatus);
+    }
+
+    async delBook(book){
+        console.log(book);
+        return await axios.delete("http://localhost:8080/deleteBook", {
+            headers: {'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
+            data: book
+            })
+            .then(this._checkStatus);
+    }
+
     register(email, password){
         return axios.post("http://localhost:8080/signup", email, password);
     }
+    
     hello(){
         return axios.get("http://localhost:8080/hello", {
             headers: {'Content-Type': 'application/json',

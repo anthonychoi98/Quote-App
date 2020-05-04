@@ -8,7 +8,7 @@ import uuid from 'uuid';
 import AppDataService from '../AppDataService';
 import AddQuote from '../AddQuote';
 import Auth from '../auth.js'
-import PopupComponent from '../PopupComponent';
+import ListBooksComponent from '../ListBooksComponent';
 
 
 class LandingPage extends React.Component{
@@ -23,63 +23,53 @@ class LandingPage extends React.Component{
       }
 
     state = {
-        quotes: [],
-        totals: []
+        books: []
       };
     
       componentDidMount() {
-            this.refreshQuotes();
+            this.refreshBooks();
         }
     
-        refreshQuotes() {
-            AppDataService.retrieveAllQuotes()
+        refreshBooks() {
+          console.log("refreshing");
+            AppDataService.retrieveAllBooks()
                 .then(
                     response => {
-                        console.log(response);
-                        this.setState({ quotes: response.data 
+                        console.log('res here',response);
+                        this.setState({ books: response.data 
                         })
                     } 
                 )
         }
-    
-      markComplete = id => {
-        this.setState({
-          quotes: this.state.quotes.map(quote => {
-            if (quote.id === id) {
-              quote.completed = !quote.completed;
-            }
-            return quote;
-          })
-        });
-      };
-    
-      // Delete Quote
-      delQuote = id => {
-          this.setState( {quotes: [... this.state.quotes.filter(quote => quote.id != id) ]})
-      };
-    
-      // Add Todo
-      addQuote = (title, author, quote, chapter, comment) => {
-        
-        const newQuote = {
-          id: uuid.v4(),
+
+      delBook = (title, author) => {
+        const oldBook = {
           title,
-          author, 
-          quote,
-          chapter,
-          comment
+          author,
+          username:this.Auth.getProfile().sub
+
         }
-    
-        this.setState( {quotes: [... this.state.quotes, JSON.stringify(newQuote) ] });
-        //doesnt refresh quotes everytime....
-        this.componentDidMount();
-        
-      }
+        let str = '{"title":"' + title + '","author":"' + author + '","username":"' + this.Auth.getProfile().sub + '"}';
+      
+        this.setState({books: this.state.books.filter(book => book != str)});
+
+        AppDataService.delBook(oldBook);
+      };
+    //doesnt update deletion or addition immediately onto page!
+
+      addBook = (title, author) => {
+        const newBook = {
+          title,
+          author,
+          username: this.Auth.getProfile().sub
+        }
+
+        this.setState ( { books: [... this.state.books, JSON.stringify(newBook) ] });
+        }
 
       async helloWorld(){
         let tots = await AppDataService.totals();
         let stats = JSON.parse(tots.response);
-        console.log('tots', JSON.parse(tots.response));
         document.getElementById('totals').innerHTML = JSON.stringify(stats,null,'\t');
       }
 
@@ -102,7 +92,9 @@ class LandingPage extends React.Component{
           )
       }
 
-
+      getprofile = () => {
+        console.log(this.Auth.getProfile().sub);
+      }
 //This function decodes the URI and gets the parameters passed to it.
   getQueryVariable(variable){
           var query = window.location.search.substring(1);
@@ -117,33 +109,18 @@ class LandingPage extends React.Component{
   render(){
     return(
       <div className="ui container">
-        <h1>Landing Page</h1>
+        <h1>Your Books</h1>
 
-      <p>Welcome Home {this.getQueryVariable("name")}</p>
-
-      <React.Fragment>
-          <AddQuote addQuote={this.addQuote} />
-          <ListQuotesComponent
-          quotes={this.state.quotes}
-          markComplete={this.markComplete}
-          delQuote={this.delQuote}
-          />
-      </React.Fragment>
-
+      <p>Welcome Home {this.Auth.getProfile().sub}</p>
+      
       <React.Fragment>
           <AddBook addBook={this.addBook} />
-          <ListQuotesComponent
-          quotes={this.state.quotes}
-          markComplete={this.markComplete}
-          delQuote={this.delQuote}
-          />
       </React.Fragment>
       
       <React.Fragment>
-          <ListQuotesComponent
-          quotes={this.state.quotes}
-          markComplete={this.markComplete}
-          delQuote={this.delQuote}
+          <ListBooksComponent
+          books={this.state.books}
+          delBook={this.delBook}
           />
       </React.Fragment>
 

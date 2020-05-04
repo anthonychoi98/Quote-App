@@ -6,13 +6,11 @@ class ListQuotesComponent extends Component {
 
     render() {
         if (this.props.quotes) {
-            console.log(this.props.quotes.map(JSON.parse));
 
             var quotes = this.props.quotes.map(JSON.parse);
             
-            
-            return quotes.map((quote) => (
-                <QuoteItem key={quote.id} quote={quote} markComplete={this.props.markComplete} delQuote={this.props.delQuote} />
+            return quotes.map((quote, key) => (
+                <QuoteItem key={key} quote={quote} delQuote={this.props.delQuote} />
             ));
         }
         else{
@@ -24,8 +22,7 @@ class ListQuotesComponent extends Component {
 
 ListQuotesComponent.propTypes = {
     quotes: PropTypes.array.isRequired,
-    markComplete: PropTypes.func.isRequired,
-    delQuote: PropTypes.func.isRequired,
+    delQuote: PropTypes.func.isRequired
   }
 
 export default ListQuotesComponent;

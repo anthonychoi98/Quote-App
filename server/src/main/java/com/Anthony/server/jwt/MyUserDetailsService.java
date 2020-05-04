@@ -8,10 +8,9 @@ import com.Anthony.server.service.PersonService;
 import com.mashape.unirest.http.HttpMethod;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.util.Date;
-
-//or is it java.awt.List;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,47 +44,43 @@ public class MyUserDetailsService implements UserDetailsService {
         ResponseEntity<Person> pi = personInfo(userName);
         Person person = pi.getBody();
 
-        System.out.println("username: " + person.getUsername());
-        System.out.println("password: " + person.getPassword());
-
         return new User(person.getUsername(), person.getPassword(), new ArrayList<>());
     }
 
-    public int insertQuote(String booktitle, String author, String quote, int chapter, String comment, Date date){
-        return personDao.insertQuote(booktitle, author, quote, chapter, comment, date);
+    public ResponseEntity<org.springframework.http.HttpStatus> insertQuote(String booktitle, String author, String quote, int chapter, String comment, String username){
+        return personDao.insertQuote(booktitle, author, quote, chapter, comment, username);
     }
 
-    public List<Quote> getQuotes(List<Quote>list){
-        return personDao.getQuotes(list);
-    }
-    
-
-  /*  public int addPerson(Person person){
-        return personDao.insertPerson(person);
-    }*/
-
-    public int insertBook(String booktitle, String author){
-        return personDao.insertBook(booktitle, author);
+    public ResponseEntity<org.springframework.http.HttpStatus> deleteQuote(String title, String author, int chapter, String quote, String comment, String username){
+        return personDao.deleteQuote(title, author, chapter, quote, comment, username);
     }
 
-    public List<Book> getBooks(List<Book>list){
-        return personDao.getBooks(list);
+    public List<Quote> getQuotes(String title, String author, String username){
+        return personDao.getQuotes(title, author, username);
+    }
+
+    public ResponseEntity<org.springframework.http.HttpStatus> insertBook(String title, String author, String username){
+        return personDao.insertBook(title, author, username);
+    }
+
+    public ResponseEntity<org.springframework.http.HttpStatus> deleteBook(String title, String author, String username){
+        return personDao.deleteBook(title, author, username);
+    }
+
+    public List<Book> getBooks(String username){
+        return personDao.getBooks(username);
     }
 
     public ResponseEntity<Person> personInfo(String username){
         return personDao.personInfo(username);
     }
 
-    public boolean login(String email, String password){
-        return personDao.login(email, password);
-    }
+    // public boolean login(String email, String password){
+    //     return personDao.login(email, password);
+    // }
 
     public boolean signup(String username, String email, String password){
         return personDao.signup(username, email, password);
-    }
-
-    public List<Person> getAllPeople(){
-        return personDao.selectAllPeople();
     }
 
     public String getTotals() throws UnirestException{

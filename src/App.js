@@ -20,6 +20,7 @@ import './App.css';
 import { toUnicode } from 'punycode';
 import AppDataService from './components/AppDataService';
 import Auth from './components/auth.js'
+import QuotesPage from './components/pages/QuotesPage';
 //import ProtectedRoute from './components/ProtectedRoute';
 
 
@@ -34,6 +35,7 @@ const ProtectedRoute = ({
       {...rest}
       render={props => {
         if (auth.loggedIn()) {
+          console.log('get the username:', auth.getProfile().sub)
           return <Component {...props} />;
         } else {
           return (
@@ -62,16 +64,15 @@ class App extends Component {
       <Router>
         <div className="App">
           <div className="container">
-            <Header />
-            {/* <Route path="/" exact component = {HomePage}/>
-            <Route path="/login" exact component = {LoginPage}/>
-            <Route path="/landing" exact component = {LandingPage}/>
-            <Route path="/registration" exact component = {RegistrationPage}/>  */}
+            <Header />    
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route path="/login" exact component = {LoginPage}/>
               <Route path="/registration" exact component = {RegistrationPage}/> 
-              <ProtectedRoute exact path="/landing" component={LandingPage} />
+              <ProtectedRoute exact path='/landing' component={LandingPage} />
+              <ProtectedRoute exact path='/quotes' component={QuotesPage} />
+              <Route path='/about' component={About}/>
+              <Route path='/camera' component={CameraComponent}/>
               <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
           </div>

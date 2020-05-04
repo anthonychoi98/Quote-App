@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppDataService from './AppDataService';
 import {withRouter} from 'react-router-dom';
+import Auth from './auth.js';
 
 export class AddBook extends Component {
 
   constructor(props) {
     super(props)
-
+    this.Auth = new Auth();
     this.state = {
         title: '',
         author: '',
+        username: this.Auth.getProfile().sub
     }
 
     this.onSubmit = this.onSubmit.bind(this)
@@ -21,10 +23,9 @@ export class AddBook extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     const q = this.state;
-    this.props.addQuote(q.title, q.author, q.quote, q.chapter, q.comment);
-    this.setState({ title: '' , author: '', quote: '', chapter: '', comment: ''});
-
-    AppDataService.insertQuote(q).then(() => this.props.history.push("/addQuote"));
+    this.props.addBook(q.title, q.author, q.username);
+    this.setState({ title: '' , author: ''});
+    AppDataService.insertBook(q);
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });

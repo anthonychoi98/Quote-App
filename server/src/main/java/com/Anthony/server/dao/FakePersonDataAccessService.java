@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.ws.Response;
 
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
@@ -36,70 +37,99 @@ public class FakePersonDataAccessService implements PersonDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public String hashPassword(String plainTextPassword){
-		return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
-    }
-
-    @Override
-    public boolean checkPass(String plainPassword, String hashedPassword) {
-		if (BCrypt.checkpw(plainPassword, hashedPassword)){
-            System.out.println("The password matches.");
-            return true;
-        }
-		else{
-            System.out.println("The password does not match.");
-            return false;
-        }
-	}
-
-    @Override
-    public int insertQuote(String title, String author, String quote, int chapter, String comment, Date date){
-        chapter = 11;
+    public ResponseEntity<HttpStatus> insertQuote(String title, String author, String quote, int chapter, String comment, String username){
+        String sql = "insert into quotes (author, quote, chapter, comment, username, title) values('" + author + "','" + quote + "','" + chapter + "','" + comment + "','" + username + "','" + title + "')";
+        System.out.println(sql);
+        int numofRowsAffected = jdbcTemplate.update(sql);
         
-        jdbcTemplate.update(
-            "insert into quotes (book_title, author, quote, chapter, date) values(?,?,?,?,?)",
-            title, author, quote, chapter, date);
+        if (numofRowsAffected > 0){
+            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        }
 
-        return 1;
+        return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
     }
 
     @Override
-    public List<Quote> getQuotes(List<Quote>list){
+    public ResponseEntity<HttpStatus> deleteQuote(String title, String author, int chapter, String quote, String comment, String username){
+        String sql = "DELETE FROM quotes WHERE title = '" + title + "' AND author = '" + author + "' AND chapter = '" + chapter + "' AND quote = '" + quote + "' AND comment = '" + comment + "' AND username = '" + username + "';";
+        System.out.println(sql);
+        int numofRowsAffected = jdbcTemplate.update(sql);
+        if (numofRowsAffected > 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
-        String sql = "SELECT * FROM quotes";
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
+    //get username and match with title and author... pass in BOOK, not username
+    @Override
+    public List<Quote> getQuotes(String title, String author, String username){
+
+        String sql = "SELECT * FROM quotes WHERE username = '" + username + "' AND title ='" + title + "' AND author = '" + author + "';";
+        System.out.println(sql);
 
         return(jdbcTemplate.query(
                 sql,
                 (rs, rowNum) ->
                         new Quote(
-                                rs.getString("book_title"),
+                                rs.getString("title"),
                                 rs.getString("author"),
                                 rs.getString("quote"),
                                 rs.getInt("chapter"),
                                 rs.getString("comment"),
-                                rs.getDate("date")
+                                rs.getDate("date"),
+                                rs.getString("username")
                         )
         ));
         
     }
 
     @Override
-    public int insertBook(String booktitle, String author){
-        return 1;
+    public ResponseEntity<HttpStatus> insertBook(String title, String author, String username){
+        int numofRowsAffected = jdbcTemplate.update(
+                    "insert into books (title, author, username) values(?,?,?)",
+                    title, author, username);
+
+        System.out.println(numofRowsAffected + " is num of rows affected!");
+
+        if (numofRowsAffected > 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @Override
-    public List<Book> getBooks(List<Book>list){
+    public ResponseEntity<HttpStatus> deleteBook(String title, String author, String username){
 
-        String sql = "select * FROM books";
+        int numofRowsAffected = jdbcTemplate.update(
+            "DELETE FROM books WHERE title = (?) AND author = (?) AND username = (?);", title, author, username);
+        
+
+        int num2 = jdbcTemplate.update(
+            "DELETE FROM quotes WHERE title = (?) AND author = (?) AND username = (?);", title, author, username);
+
+        if (numofRowsAffected > 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public List<Book> getBooks(String username){
+
+        List<Book> list = new ArrayList<Book>();
+
+        String sql = "select * FROM books where username = '" + username + "';";
 
         list = jdbcTemplate.query(
                 sql,
                 (rs, rowNum) ->
                         new Book(
-                                rs.getString("book_title"),
-                                rs.getString("author")
+                                rs.getString("title"),
+                                rs.getString("author"),
+                                rs.getString("username")
                         ));
         
         return list;
@@ -135,33 +165,33 @@ public class FakePersonDataAccessService implements PersonDao {
         return new ResponseEntity<Person>(person, HttpStatus.OK);
     }
 
-    @Override
-    public boolean login(String email, String password){
-        System.out.println("email is " + email + " and pwd is : " + password);
+    // @Override
+    // public boolean login(String email, String password){
+    //     System.out.println("email is " + email + " and pwd is : " + password);
 
-        String sql = "select email from users where " + email + " = email;";
+    //     String sql = "select email from users where " + email + " = email;";
         
-        boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
+    //     boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
 
-        //if email exists, try to match passwords
-        if(emailExists){
-            String passwordQuery = "select password from users where email = '" + email + "';";
+    //     //if email exists, try to match passwords
+    //     if(emailExists){
+    //         String passwordQuery = "select password from users where email = '" + email + "';";
     
-            String userPassword = (String) jdbcTemplate.queryForObject(
-                passwordQuery, String.class);
+    //         String userPassword = (String) jdbcTemplate.queryForObject(
+    //             passwordQuery, String.class);
         
-           if(checkPass(password, userPassword)){
-               //return authentication token
-                return true;
-            }
-            else{
-                //invalid password
-                return false;
-            }
-        }
+    //        if(checkPass(password, userPassword)){
+    //            //return authentication token
+    //             return true;
+    //         }
+    //         else{
+    //             //invalid password
+    //             return false;
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     @Override
     public boolean signup(String username, String email, String password){
@@ -184,21 +214,6 @@ public class FakePersonDataAccessService implements PersonDao {
 
         System.out.println("email exists already");
         return false;
-    }
-
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public List<Person> selectAllPeople() {
-        return DB;
     }
 
     @Override

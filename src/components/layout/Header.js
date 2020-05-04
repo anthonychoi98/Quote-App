@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Auth from '../auth.js';
 
 function Header() {
-  return (
+    return (
     <header style={headerStyle}>
       <h1>QuoteList</h1>
-      <Link style={linkStyle} to="/">Home</Link> | <Link style={linkStyle} to="/about">About</Link>
+      <Link style={linkStyle} to='/landing'>Home</Link> | <Link style={linkStyle} to="/camera"> Camera </Link>  
+      |  <Link style={linkStyle} to="/about"> About </Link> 
+      
     </header>
   )
 }

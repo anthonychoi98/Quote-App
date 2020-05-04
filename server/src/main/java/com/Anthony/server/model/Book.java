@@ -5,17 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Book{
     private String id;
-    private String book_title;
-    private String author;
+    public String title;
+    public String author;
+    public String username;
 
     public Book(){
-        this.book_title = "";
+        this.title = "";
         this.author = "";
+        this.username = "";
     }
 
-    public Book(String book_title, String author){
-        this.book_title = book_title;
+    public Book(String title, String author, String username){
+        this.title = title;
         this.author = author;
+        this.username = username;
     }
 
     

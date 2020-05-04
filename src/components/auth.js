@@ -17,19 +17,7 @@ export default class Auth {
         console.log(res.data)
         this.setToken(res.data.jwt)
         return Promise.resolve(res);
-    })
-        
-      
-      // function(response){
-
-      //   var username = response.data.username;
-        
-      //   console.log(response.data);
-        
-      //   this.setToken(response.data.jwt);
-              
-      //   return Promise.resolve(response);
-      // });   
+    }) 
     }
   
     logout() {

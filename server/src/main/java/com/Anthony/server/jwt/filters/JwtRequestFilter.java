@@ -29,14 +29,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        if(request == null){
-            System.out.println("request is null");
-            System.out.println("OVER OIJAO;EIFJOW;AIJEFO;IAJWOEFINJAOPWINJEFO;IAWJEOFIJAOW;IEJFNO;AWIJE");
-        }
-        if(response == null){
-            System.out.println("response is null");
-        }
-
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;

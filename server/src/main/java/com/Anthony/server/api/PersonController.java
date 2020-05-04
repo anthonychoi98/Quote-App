@@ -14,8 +14,10 @@ import java.text.SimpleDateFormat;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,27 +51,37 @@ public class PersonController {
     }
 
     @PostMapping("addQuote")
-    //public void addQuote(@RequestBody String booktitle, @RequestBody String quote, @RequestBody int chapter, @RequestBody Date date){
-    public void addQuote(@RequestBody String data) throws ParseException{
+    public ResponseEntity<HttpStatus> addQuote(@RequestBody String data) throws ParseException{
 
-        String quote = "hello world";
-        String author = "haruki";
-        String comment = "";
-        String date1 = "01/28/2020";
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(date1);  
+        Gson gson = new Gson();
 
-        personService.insertQuote("ssw", author, data, 12, comment, date);
+        Quote quote =  gson.fromJson(data, Quote.class);
+
+        return personService.insertQuote(quote.title, quote.author, quote.quote, quote.chapter, quote.comment, quote.username);
     }
 
-    @GetMapping("/getQuotes")
-    public List<String> getQuotes(){
+    @DeleteMapping("/deleteQuote")
+    public ResponseEntity<HttpStatus> deleteQuote(@RequestBody String data){
+        System.out.println("deleting quote: " + data);
+
+        Gson gson = new Gson();
+
+        Quote quote = gson.fromJson(data, Quote.class);
+
+        return personService.deleteQuote(quote.title, quote.author, quote.chapter, quote.quote, quote.comment, quote.username);
+    }
+
+    @PostMapping("/getQuotes")
+    public List<String> getQuotes(@RequestBody String data){
         List<Quote> quotes = new ArrayList<>();
 
         List<String> list = new ArrayList<String>();
-
         Gson gson = new Gson();
-        
-        quotes = personService.getQuotes(quotes);
+        Book book = gson.fromJson(data, Book.class);
+
+        System.out.println("getting quotes : username =" + book.title);
+
+        quotes = personService.getQuotes(book.title, book.author, book.username);
 
         for(Quote quote : quotes){
             list.add(gson.toJson(quote));
@@ -78,23 +90,41 @@ public class PersonController {
         return list;
     }
 
-    @PostMapping("addBook")
-    public void addBook(@RequestBody String data) throws ParseException{
+    @PostMapping("/addBook")
+    public ResponseEntity<HttpStatus> addBook(@RequestBody String data) throws ParseException{
+        System.out.println("adding book : " + data);
 
-        personService.insertBook("book_title", "author");
+        Gson gson = new Gson();
+
+        Book book = gson.fromJson(data, Book.class);
+
+        return personService.insertBook(book.title, book.author, book.username);
     }
 
-    @GetMapping("/getBooks")
-    public List<String> getBooks(){
+    @DeleteMapping("/deleteBook")
+    public ResponseEntity<HttpStatus> deleteBook(@RequestBody String data){
+        System.out.println("deleting book: " + data);
+
+        Gson gson = new Gson();
+
+        Book book = gson.fromJson(data, Book.class);
+
+        return personService.deleteBook(book.title, book.author, book.username);
+    }
+
+    @PostMapping("/getBooks")
+    public List<String> getBooks(@RequestBody String username){
+        System.out.println("getting books");
         List<Book> books = new ArrayList<>();
 
         List<String> list = new ArrayList<String>();
 
         Gson gson = new Gson();
         
-        books = personService.getBooks(books);
+        books = personService.getBooks(username);
 
         for(Book book : books){
+            System.out.println(book.title);
             list.add(gson.toJson(book));
         }
         
@@ -107,15 +137,15 @@ public class PersonController {
         return personService.personInfo(data);
     }
 
-    @PostMapping("/login")
-    public boolean login(@RequestBody String data){
-        System.out.println("here is the data: " + data);
-        JSONObject jsonObject = new JSONObject(data);
-        //String username = jsonObject.getString("username"); 
-        String email = jsonObject.getString("email"); 
-        String password = jsonObject.getString("password"); 
-        return personService.login(email, password);
-    }  
+    // @PostMapping("/login")
+    // public boolean login(@RequestBody String data){
+    //     System.out.println("here is the data: " + data);
+    //     JSONObject jsonObject = new JSONObject(data);
+    //     //String username = jsonObject.getString("username"); 
+    //     String email = jsonObject.getString("email"); 
+    //     String password = jsonObject.getString("password"); 
+    //     return personService.login(email, password);
+    // }  
     
     @PostMapping("/signup")
     public boolean signup(@RequestBody String data){
@@ -131,13 +161,6 @@ public class PersonController {
         
         return personService.signup(username, email, encodedPassword);
     }
-    
-
-    @GetMapping("/get")
-    public List<Person> getAllPeople(){
-        return personService.getAllPeople();
-    }
-
 
 
 }
