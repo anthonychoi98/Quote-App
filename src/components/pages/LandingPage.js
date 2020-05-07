@@ -40,7 +40,7 @@ class LandingPage extends React.Component{
                         })
                     } 
                 )
-        }
+        }  
 
       delBook = (title, author) => {
         const oldBook = {
@@ -141,8 +141,6 @@ class LandingPage extends React.Component{
   }
 
 }
-
-
 
 
 export default LandingPage;

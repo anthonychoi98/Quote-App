@@ -120,8 +120,19 @@ class QuotesPage extends React.Component{
       }
 
   render(){
+    const linkStyle= {
+      borderRadius: '10px',
+      background: 'lightblue',
+      padding: '10px',
+      marginTop: '10px',
+      float: 'right'
+    }
     return(
+      
       <div className="ui container">
+
+      <Link style={linkStyle} to="/camera"> Camera </Link> 
+
         <h1>Quotes for {this.state.book.title}</h1>
 
       <p>Welcome Home {this.Auth.getProfile().sub}</p>

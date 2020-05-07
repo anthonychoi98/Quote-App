@@ -21,8 +21,7 @@ import { toUnicode } from 'punycode';
 import AppDataService from './components/AppDataService';
 import Auth from './components/auth.js'
 import QuotesPage from './components/pages/QuotesPage';
-//import ProtectedRoute from './components/ProtectedRoute';
-
+import CameraPage from './components/pages/CameraPage';
 
 const auth = new Auth();
 
@@ -72,7 +71,7 @@ class App extends Component {
               <ProtectedRoute exact path='/landing' component={LandingPage} />
               <ProtectedRoute exact path='/quotes' component={QuotesPage} />
               <Route path='/about' component={About}/>
-              <Route path='/camera' component={CameraComponent}/>
+              <Route path='/camera' component={CameraPage}/>
               <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
           </div>

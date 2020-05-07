@@ -1,6 +1,8 @@
 
 import axios from 'axios'
 import Auth from './auth.js';
+import qs from "qs";
+
 
 class AppDataService {
 
@@ -28,6 +30,24 @@ class AppDataService {
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
             .then(this._checkStatus) ;
+    }
+
+    async extractQuote(blob){
+        console.log("extractingg......", blob);
+    
+
+        // Required request part 'Image' is not present
+        let formdata = new FormData();
+//not blob? 
+        //image is a now a file
+        formdata.append('Image', blob);
+
+        return await axios.post("http://localhost:8080/api/ocr", formdata, {
+            headers: {'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p',
+            'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
+        })
+            .then(this._checkStatus) ;
+
     }
 
     async insertQuote(quote){

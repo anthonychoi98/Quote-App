@@ -43,7 +43,6 @@ export default class Auth {
     }
 
     getToken() {
-      console.log("over here");
       // Retrieves the user token from localStorage
       return localStorage.getItem('id_token')
     }
