@@ -11,6 +11,7 @@ export class BookItem extends Component {
     this.closeModal = this.closeModal.bind(this);
 
     this.state = {
+      buttonHovered: false,
       open: false,
       shade: '#f4f4f4'
     }
@@ -20,9 +21,24 @@ export class BookItem extends Component {
     return {
       background: this.state.shade,
       padding: '10px',
-      borderBottom: '1px #ccc dotted',
+      borderBottom: '1px #ccc dotted'
     }
   }
+
+  switchShade = () => {
+    if(this.state.shade === '#f4f4f4'){
+      this.setState({shade: 'lightblue'})
+    }else{
+      this.setState({shade: '#f4f4f4'})
+    }
+  }
+
+  setButtonHovered = () => {
+
+    this.setState({buttonHovered: !this.state.buttonHovered});
+    this.switchShade();
+  }
+  
 
   openModal() {
     this.setState({ open: true });
@@ -44,8 +60,10 @@ export class BookItem extends Component {
     const { title, author } = this.props.book;
     return (
       <div style={this.getStyle()}>
-        <label onClick={this.onClick}>
-          { this.props.book.title }
+        <label onClick={this.onClick} onMouseEnter={() => this.setButtonHovered()} 
+  onMouseLeave={() => this.setButtonHovered()}>
+
+      <b> { this.props.book.title }</b>
         </label>
         <div>
         <p>

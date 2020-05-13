@@ -91,6 +91,7 @@ export default class Crop extends PureComponent {
         this.fileUrl = window.URL.createObjectURL(blob);
         //must post a file, not blob url, so persist in the state
         this.setState({image: blob});
+        
         resolve(this.fileUrl);
       }, 'image/jpeg');
     });

@@ -126,10 +126,10 @@ class LandingPage extends React.Component{
 
       <h1 id="totals"></h1>
 
-      <Button style={{ size: 200, marginLeft: 10 }} onClick={() => this.handleLogout()}>
+      <Button style={{ fontSize: '18px',   marginLeft: 10 }} onClick={() => this.handleLogout()}>
                 Log Out
       </Button>
-      <Button style={{ size: 200, marginLeft: 10 }} onClick={() => this.helloWorld()}>
+      <Button style={{ fontSize: '18px', marginLeft: 10 }} onClick={() => this.helloWorld()}>
                 Hello World!
       </Button>
 

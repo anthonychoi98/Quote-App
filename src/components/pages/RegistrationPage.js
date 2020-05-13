@@ -18,23 +18,29 @@ class RegistrationPage extends React.Component{
   
     componentWillMount(){
     }
+    
   
     //This renders the HTML code
     render(){
       return(
-
-        <div className="ui container">
-          <img src={"./cameraman.png"}/>
-
-          <h1>Registration Page</h1>
+        <div>
+        <h1>Registration Page</h1>
+        <div className="row" style={rowstyle}>
+        
+          <div className="column" style={columnstyle}>   
           <RegistrationForm  submit={this.handleFormSubmit}/>
+          
             <p id="status"></p>
-            <Button style={{ size: 200 }} onClick={() => this.props.history.push("/")}>
+            <Button onClick={() => this.props.history.push("/")}>
             Go Back Home
           </Button>
+          </div>
+          <div className="column" style={columnstyle}>
+            <img src="https://thumbs.gfycat.com/MistyAcidicAsiaticlesserfreshwaterclam-max-1mb.gif"></img>
+          </div>
           
         </div>
-  
+        </div>
         );
       }
   
@@ -54,6 +60,13 @@ class RegistrationPage extends React.Component{
               }
           )
       }
+  }
+  var rowstyle = {
+    display: 'flex'
+  };
+  var columnstyle = {
+    flex: '50%',
+    paddingTop: '12px'
   }
   
   

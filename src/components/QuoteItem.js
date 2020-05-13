@@ -15,12 +15,19 @@ export class QuoteItem extends Component {
     return (
       <div style={this.getStyle()}>
         <p>
-          { this.props.quote.chapter }
-          { this.props.quote.quote }
-          { this.props.quote.comment }
-
+          <div>
+          <p>Chapter { this.props.quote.chapter } </p>
+          </div>
+          <div>
+          <p>Quote:  { this.props.quote.quote }</p>
           <button onClick={this.props.delQuote.bind(this, title, author, chapter, quote, comment)} style={btnStyle}>x</button>
+          </div>
+          <div>
+          <p>Comment: { this.props.quote.comment } </p>
+          </div>
         </p>
+        
+
       </div>
     )
   }

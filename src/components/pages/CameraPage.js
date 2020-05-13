@@ -19,6 +19,7 @@ class CameraPage extends React.Component{
     render(){
         return(
             <div>
+                <h2>Copy and paste the extracted text into the quote input field</h2>
             <CameraComponent/>
             </div>
         )
