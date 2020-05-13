@@ -5,7 +5,7 @@ import decode from 'jwt-decode';
 export default class Auth {
 
     constructor() {
-      this.domain = 'http://localhost:8080'
+      this.domain = 'https://simpquotes.netlify.app'
       this.login = this.login.bind(this)
       this.getProfile = this.getProfile.bind(this)
     }
@@ -13,7 +13,7 @@ export default class Auth {
     login(data) {
       this.authenticated = true;
       
-      return this.post('https://simpquoteapp.netlify.app', data).then(res => {
+      return this.post('https://simpquotes.netlify.app', data).then(res => {
         console.log(res.data)
         this.setToken(res.data.jwt)
         return Promise.resolve(res);

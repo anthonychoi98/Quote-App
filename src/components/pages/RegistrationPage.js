@@ -45,7 +45,7 @@ class RegistrationPage extends React.Component{
       }
   
       handleFormSubmit(data){
-        axios.post('https://simpquoteapp.netlify.app',data).then(res =>{
+        axios.post('https://simpquotes.netlify.app',data).then(res =>{
           this.props.history.replace('/login');
         })
         .catch(err =>{
