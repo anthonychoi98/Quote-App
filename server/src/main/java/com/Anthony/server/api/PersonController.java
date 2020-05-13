@@ -134,6 +134,7 @@ public class PersonController {
     @PostMapping("/personInfo")
     public ResponseEntity<Person> personInfo(@RequestBody String data){
         //use bcrypt to decode password before checking data 
+        System.out.println("login data: " + data);
         return personService.personInfo(data);
     }
 

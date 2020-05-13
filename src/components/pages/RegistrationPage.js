@@ -45,7 +45,7 @@ class RegistrationPage extends React.Component{
       }
   
       handleFormSubmit(data){
-        axios.post('http://localhost:8080/signup',data).then(res =>{
+        axios.post('https://elegant-aryabhata-740be9.netlify.app/signup',data).then(res =>{
           this.props.history.replace('/login');
         })
         .catch(err =>{
