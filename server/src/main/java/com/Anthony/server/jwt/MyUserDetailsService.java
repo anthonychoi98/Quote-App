@@ -75,10 +75,6 @@ public class MyUserDetailsService implements UserDetailsService {
         return personDao.personInfo(username);
     }
 
-    // public boolean login(String email, String password){
-    //     return personDao.login(email, password);
-    // }
-
     public boolean signup(String username, String email, String password){
         return personDao.signup(username, email, password);
     }

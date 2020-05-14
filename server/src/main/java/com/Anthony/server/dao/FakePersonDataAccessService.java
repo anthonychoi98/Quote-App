@@ -31,8 +31,6 @@ public class FakePersonDataAccessService implements PersonDao {
     private static List<Person> DB = new ArrayList<Person>();
     private static List<String> list = new ArrayList<String>();
 
-    //autowire a bcryptpasswordencoder
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -61,7 +59,6 @@ public class FakePersonDataAccessService implements PersonDao {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    //get username and match with title and author... pass in BOOK, not username
     @Override
     public List<Quote> getQuotes(String title, String author, String username){
 
@@ -151,10 +148,6 @@ public class FakePersonDataAccessService implements PersonDao {
             String userPassword = (String) jdbcTemplate.queryForObject(
                 passwordQuery, String.class);
 
-                // if(checkPass(password, userPassword)){
-                //     //return authentication token
-                //      return data.append(username, userPassword);
-                //  }
                 person.setPassword(userPassword);
                 person.setUsername(username);
 
@@ -164,34 +157,6 @@ public class FakePersonDataAccessService implements PersonDao {
 
         return new ResponseEntity<Person>(person, HttpStatus.OK);
     }
-
-    // @Override
-    // public boolean login(String email, String password){
-    //     System.out.println("email is " + email + " and pwd is : " + password);
-
-    //     String sql = "select email from users where " + email + " = email;";
-        
-    //     boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
-
-    //     //if email exists, try to match passwords
-    //     if(emailExists){
-    //         String passwordQuery = "select password from users where email = '" + email + "';";
-    
-    //         String userPassword = (String) jdbcTemplate.queryForObject(
-    //             passwordQuery, String.class);
-        
-    //        if(checkPass(password, userPassword)){
-    //            //return authentication token
-    //             return true;
-    //         }
-    //         else{
-    //             //invalid password
-    //             return false;
-    //         }
-    //     }
-
-    //     return false;
-    // }
 
     @Override
     public boolean signup(String username, String email, String password){

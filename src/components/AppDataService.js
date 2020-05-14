@@ -7,15 +7,15 @@ import qs from "qs";
 class AppDataService {
 
     constructor(){
+        this.domain = window.location.origin;
         this.Auth = new Auth();
     }
-//maybe should be a post
+
     async retrieveAllQuotes(state) {
-        console.log('getting all quotes');
         let username = this.Auth.getProfile().sub;
         let book = state.state;
 
-        return await axios.post("https://simpquotes.netlify.app/getQuotes", {title: book.title, author: book.author, username}, {
+        return await axios.post(this.domain.concat("/getQuotes"), {title: book.title, author: book.author, username}, {
             headers: {'Content-Type': 'application/json',   
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -25,7 +25,7 @@ class AppDataService {
     async retrieveAllBooks(){
         let username = this.Auth.getProfile().sub;
     
-        return await axios.post("https://simpquotes.netlify.app/getBooks", username, {
+        return await axios.post(this.domain.concat("/getBooks"), username, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -33,16 +33,12 @@ class AppDataService {
     }
 
     async extractQuote(blob){
-        console.log("extractingg......", blob);
-    
-
-        // Required request part 'Image' is not present
         let formdata = new FormData();
-//not blob? 
+
         //image is a now a file
         formdata.append('Image', blob);
 
-        return await axios.post("https://simpquotes.netlify.app/api/ocr", formdata, {
+        return await axios.post(this.domain.concat("/api/ocr"), formdata, {
             headers: {'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -52,7 +48,7 @@ class AppDataService {
 
     async insertQuote(quote){
         console.log('quote is : ',quote);
-        return await axios.post("https://simpquotes.netlify.app/addQuote", quote, {
+        return await axios.post(this.domain.concat("/addQuote"), quote, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -60,7 +56,7 @@ class AppDataService {
     }
 
     async insertBook(book){
-        return await axios.post("https://simpquotes.netlify.app/addBook", book, {
+        return await axios.post(this.domain.concat("/addBook"), book, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -68,8 +64,8 @@ class AppDataService {
     }
 
     async delQuote(quote){
-        console.log("deleting", quote);
-        return await axios.delete("https://simpquotes.netlify.app/deleteQuote", {
+
+        return await axios.delete(this.domain.concat("/deleteQuote"), {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
             data: quote
@@ -79,7 +75,7 @@ class AppDataService {
 
     async delBook(book){
         console.log(book);
-        return await axios.delete("https://simpquotes.netlify.app/deleteBook", {
+        return await axios.delete(this.domain.concat("/deleteBook"), {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
             data: book
@@ -88,11 +84,11 @@ class AppDataService {
     }
 
     register(email, password){
-        return axios.post("https://simpquotes.netlify.app/signup", email, password);
+        return axios.post(this.domain.concat("/signup", email, password));
     }
     
     hello(){
-        return axios.get("https://simpquotes.netlify.app/hello", {
+        return axios.get(this.domain.concat("/hello"), {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -102,7 +98,7 @@ class AppDataService {
     //get coronavirus stats
     async totals(){
         console.log('Bearer ', localStorage.getItem('id_token'));
-        let data = await axios.get("https://simpquotes.netlify.app/totals", {
+        let data = await axios.get(this.domain.concat("/totals"), {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('id_token')

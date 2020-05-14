@@ -53,7 +53,7 @@ public class ServerApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://simpquotes.netlify.app").allowedMethods("GET", "POST","PUT", "DELETE");
+                registry.addMapping("/**").allowedMethods("GET", "POST","PUT", "DELETE");
             }
         };
     }
