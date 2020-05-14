@@ -19,7 +19,6 @@ class LoginPage extends React.Component{
         this.props.history.replace('/landing?name='+ this.Auth.getProfile());
   }
 
-  //This renders the HTML code
   render(){
     return(
         <div>

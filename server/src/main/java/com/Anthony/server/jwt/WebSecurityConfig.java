@@ -48,10 +48,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
                     .antMatchers("/personInfo").permitAll()
                     .antMatchers("/signup").permitAll().
                             anyRequest().authenticated().and().
-                            /*exceptionHandling()./*and().sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            httpSecurity.
-            anyMatchers("/logout").permitAll(). */
 
             addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling();
 

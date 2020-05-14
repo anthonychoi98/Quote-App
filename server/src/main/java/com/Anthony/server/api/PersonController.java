@@ -137,16 +137,6 @@ public class PersonController {
         System.out.println("login data: " + data);
         return personService.personInfo(data);
     }
-
-    // @PostMapping("/login")
-    // public boolean login(@RequestBody String data){
-    //     System.out.println("here is the data: " + data);
-    //     JSONObject jsonObject = new JSONObject(data);
-    //     //String username = jsonObject.getString("username"); 
-    //     String email = jsonObject.getString("email"); 
-    //     String password = jsonObject.getString("password"); 
-    //     return personService.login(email, password);
-    // }  
     
     @PostMapping("/signup")
     public boolean signup(@RequestBody String data){

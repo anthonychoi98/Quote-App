@@ -25,8 +25,6 @@ public interface PersonDao {
     ResponseEntity<HttpStatus> insertBook(String title, String author, String username);
 
     ResponseEntity<HttpStatus> deleteBook(String title, String author, String username);
-
-   // boolean login(String email, String password);
     
     ResponseEntity<Person> personInfo(String username);
 
