@@ -53,7 +53,7 @@ public class ServerApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://simpquotes.herokuapp.com").allowedMethods("GET", "POST","PUT", "DELETE");
+                registry.addMapping("/**").allowedOrigins("https://simpquotes.herokuapp.com", "http://localhost:8080").allowedMethods("GET", "POST","PUT", "DELETE");
             }
         };
     }

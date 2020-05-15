@@ -25,10 +25,14 @@
     "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "postinstall": "react-scripts build",
+     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "engines": {
+    "npm": "~6.13.2"
   },
   "eslintConfig": {
     "extends": "react-app"

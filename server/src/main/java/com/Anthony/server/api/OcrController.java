@@ -28,13 +28,6 @@ import net.sourceforge.tess4j.TesseractException;
 @RestController
 public class OcrController {
 
-
-    //at least 300 dpi? where can i do that?
-    //use .tiff or .pdf 
-
-
-
-
 	@PostMapping("/api/ocr")
 	public String DoOCR(@RequestParam("Image")  MultipartFile image) throws IOException {
         //only english
