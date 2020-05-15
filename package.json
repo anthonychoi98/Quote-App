@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "https://simpquotes.herokuapp.com/",
+  "homepage": "https://simpquotes.herokuapp.com",
   "private": true,
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.6.5",
@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "npm run build"
+    "heroku-postbuild": "npm run build"
   },
   "engines": {
     "node":"10.16.3",
