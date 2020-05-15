@@ -43,6 +43,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
+            httpSecurity.requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure();
+  
             httpSecurity.csrf().disable()
                     .authorizeRequests().antMatchers("/authenticate").permitAll()
                     .antMatchers("/personInfo").permitAll()

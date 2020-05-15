@@ -62,7 +62,6 @@ public class PersonController {
 
     @DeleteMapping("/deleteQuote")
     public ResponseEntity<HttpStatus> deleteQuote(@RequestBody String data){
-        System.out.println("deleting quote: " + data);
 
         Gson gson = new Gson();
 
@@ -79,8 +78,6 @@ public class PersonController {
         Gson gson = new Gson();
         Book book = gson.fromJson(data, Book.class);
 
-        System.out.println("getting quotes : username =" + book.title);
-
         quotes = personService.getQuotes(book.title, book.author, book.username);
 
         for(Quote quote : quotes){
@@ -92,7 +89,6 @@ public class PersonController {
 
     @PostMapping("/addBook")
     public ResponseEntity<HttpStatus> addBook(@RequestBody String data) throws ParseException{
-        System.out.println("adding book : " + data);
 
         Gson gson = new Gson();
 
@@ -103,7 +99,6 @@ public class PersonController {
 
     @DeleteMapping("/deleteBook")
     public ResponseEntity<HttpStatus> deleteBook(@RequestBody String data){
-        System.out.println("deleting book: " + data);
 
         Gson gson = new Gson();
 
@@ -114,7 +109,6 @@ public class PersonController {
 
     @PostMapping("/getBooks")
     public List<String> getBooks(@RequestBody String username){
-        System.out.println("getting books");
         List<Book> books = new ArrayList<>();
 
         List<String> list = new ArrayList<String>();
@@ -134,7 +128,6 @@ public class PersonController {
     @PostMapping("/personInfo")
     public ResponseEntity<Person> personInfo(@RequestBody String data){
         //use bcrypt to decode password before checking data 
-        System.out.println("login data: " + data);
         return personService.personInfo(data);
     }
     
@@ -147,8 +140,6 @@ public class PersonController {
         String password = jsonObject.getString("password"); 
 
         String encodedPassword = bCryptPasswordEncoder.encode(password);
-
-        System.out.println("encoded password: " + encodedPassword);
         
         return personService.signup(username, email, encodedPassword);
     }

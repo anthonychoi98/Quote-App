@@ -37,7 +37,7 @@ public class FakePersonDataAccessService implements PersonDao {
     @Override
     public ResponseEntity<HttpStatus> insertQuote(String title, String author, String quote, int chapter, String comment, String username){
         String sql = "insert into quotes (author, quote, chapter, comment, username, title) values('" + author + "','" + quote + "','" + chapter + "','" + comment + "','" + username + "','" + title + "')";
-        System.out.println(sql);
+
         int numofRowsAffected = jdbcTemplate.update(sql);
         
         if (numofRowsAffected > 0){
@@ -50,7 +50,7 @@ public class FakePersonDataAccessService implements PersonDao {
     @Override
     public ResponseEntity<HttpStatus> deleteQuote(String title, String author, int chapter, String quote, String comment, String username){
         String sql = "DELETE FROM quotes WHERE title = '" + title + "' AND author = '" + author + "' AND chapter = '" + chapter + "' AND quote = '" + quote + "' AND comment = '" + comment + "' AND username = '" + username + "';";
-        System.out.println(sql);
+
         int numofRowsAffected = jdbcTemplate.update(sql);
         if (numofRowsAffected > 0){
             return new ResponseEntity<>(HttpStatus.OK);
@@ -63,7 +63,6 @@ public class FakePersonDataAccessService implements PersonDao {
     public List<Quote> getQuotes(String title, String author, String username){
 
         String sql = "SELECT * FROM quotes WHERE username = '" + username + "' AND title ='" + title + "' AND author = '" + author + "';";
-        System.out.println(sql);
 
         return(jdbcTemplate.query(
                 sql,
@@ -86,8 +85,6 @@ public class FakePersonDataAccessService implements PersonDao {
         int numofRowsAffected = jdbcTemplate.update(
                     "insert into books (title, author, username) values(?,?,?)",
                     title, author, username);
-
-        System.out.println(numofRowsAffected + " is num of rows affected!");
 
         if (numofRowsAffected > 0){
             return new ResponseEntity<>(HttpStatus.OK);
@@ -164,8 +161,6 @@ public class FakePersonDataAccessService implements PersonDao {
 
         String sql = "select email from users where " + email + " = email;";
         
-        //NOT SURE WHAT EMAIL PARAMETER IS FOR NEW OBJECT CLASS
-
         boolean emailExists = jdbcTemplate.queryForObject("SELECT EXISTS(SELECT 1 FROM users WHERE email = '" + email + "');", Boolean.class);
 
         System.out.println("username  : " + username + " and email " + email);
