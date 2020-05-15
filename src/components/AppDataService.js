@@ -97,7 +97,7 @@ class AppDataService {
     //get coronavirus stats
     async totals(){
         console.log('Bearer ', localStorage.getItem('id_token'));
-        let data = await axios.get(this.domain.concat("/totals"), {
+        let data = await axios.get("https://simpquote.herokuapp.com/totals", {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('id_token')
