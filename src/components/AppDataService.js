@@ -7,7 +7,6 @@ import qs from "qs";
 class AppDataService {
 
     constructor(){
-        this.domain = window.location.origin;
         this.Auth = new Auth();
     }
 
@@ -15,7 +14,7 @@ class AppDataService {
         let username = this.Auth.getProfile().sub;
         let book = state.state;
 
-        return await axios.post(this.domain.concat("/getQuotes"), {title: book.title, author: book.author, username}, {
+        return await axios.post("https://simpquote.herokuapp.com/getQuotes", {title: book.title, author: book.author, username}, {
             headers: {'Content-Type': 'application/json',   
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -25,7 +24,7 @@ class AppDataService {
     async retrieveAllBooks(){
         let username = this.Auth.getProfile().sub;
     
-        return await axios.post(this.domain.concat("/getBooks"), username, {
+        return await axios.post("https://simpquote.herokuapp.com/getBooks", username, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -38,7 +37,7 @@ class AppDataService {
         //image is a now a file
         formdata.append('Image', blob);
 
-        return await axios.post(this.domain.concat("/api/ocr"), formdata, {
+        return await axios.post("https://simpquote.herokuapp.com/api/ocr", formdata, {
             headers: {'Content-Type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -48,7 +47,7 @@ class AppDataService {
 
     async insertQuote(quote){
         console.log('quote is : ',quote);
-        return await axios.post(this.domain.concat("/addQuote"), quote, {
+        return await axios.post("https://simpquote.herokuapp.com/addQuote", quote, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -56,7 +55,7 @@ class AppDataService {
     }
 
     async insertBook(book){
-        return await axios.post(this.domain.concat("/addBook"), book, {
+        return await axios.post("https://simpquote.herokuapp.com/addBook", book, {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })
@@ -65,7 +64,7 @@ class AppDataService {
 
     async delQuote(quote){
 
-        return await axios.delete(this.domain.concat("/deleteQuote"), {
+        return await axios.delete("https://simpquote.herokuapp.com/deleteQuote", {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
             data: quote
@@ -75,7 +74,7 @@ class AppDataService {
 
     async delBook(book){
         console.log(book);
-        return await axios.delete(this.domain.concat("/deleteBook"), {
+        return await axios.delete("https://simpquote.herokuapp.com/deleteBook", {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')},
             data: book
@@ -84,11 +83,11 @@ class AppDataService {
     }
 
     register(email, password){
-        return axios.post(this.domain.concat("/signup", email, password));
+        return axios.post("https://simpquote.herokuapp.com/signup", email, password);
     }
     
     hello(){
-        return axios.get(this.domain.concat("/hello"), {
+        return axios.get("https://simpquote.herokuapp.com/hello", {
             headers: {'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('id_token')}
         })

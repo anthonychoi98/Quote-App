@@ -23,10 +23,6 @@ import "react-toggle/style.css"
 
    onSubmit = (e) => {
       e.preventDefault();
-      //console.log(this.state.data);
-      //This checks if the user wants to be an admin and changes it to false to avoid security risks. It also notifies that a specified user wants to be an admin.
-      //We can replace the "alert()" function that displays the admin status of a user with a sendEmail function that notifies the platform architect.
-      
       this.props.submit(this.state.data);
    };
 

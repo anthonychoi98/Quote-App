@@ -13,7 +13,7 @@ export default class Auth {
     login(data) {
       this.authenticated = true;
 
-      return this.post(this.domain.concat("/authenticate"), data).then(res => {
+      return this.post("https://simpquote.herokuapp.com/authenticate", data).then(res => {
         console.log(res.data)
         this.setToken(res.data.jwt)
         return Promise.resolve(res);
